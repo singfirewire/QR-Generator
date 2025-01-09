@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สร้าง QR Code จาก URL</title>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
@@ -55,6 +56,7 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.2s ease;
+            margin: 5px;
         }
         button:hover {
             background: #5a6fd1;
@@ -91,6 +93,7 @@
         <input type="text" id="urlInput" placeholder="ป้อน URL ของคุณที่นี่...">
         <button onclick="generateQRCode()">สร้าง QR Code</button>
         <div id="qrcode"></div>
+        <button id="saveBtn" onclick="saveQRCode()" style="display: none;">บันทึก QR Code</button>
         <div class="footer">สแกน QR Code เพื่อเข้าสู่ลิงก์</div>
     </div>
     <div class="credits">
@@ -116,6 +119,21 @@
                 text: url,
                 width: 200,
                 height: 200
+            });
+
+            // แสดงปุ่มบันทึก
+            document.getElementById("saveBtn").style.display = "inline-block";
+        }
+
+        function saveQRCode() {
+            // ใช้ html2canvas เพื่อแปลง QR Code เป็นรูปภาพ
+            const qrElement = document.getElementById("qrcode");
+            html2canvas(qrElement).then(canvas => {
+                // สร้างลิงก์สำหรับดาวน์โหลด
+                const link = document.createElement("a");
+                link.download = "QRCode.png"; // ชื่อไฟล์
+                link.href = canvas.toDataURL("image/png"); // รูปแบบไฟล์
+                link.click(); // คลิกเพื่อดาวน์โหลด
             });
         }
     </script>
